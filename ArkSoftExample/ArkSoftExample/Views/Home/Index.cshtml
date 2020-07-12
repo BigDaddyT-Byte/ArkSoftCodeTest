@@ -1,0 +1,89 @@
+﻿@model PagedList.IPagedList<ArkSoftExample.Models.Customer>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Customers";
+}
+
+<h2>Customer Records</h2>
+<p>
+    @Html.ActionLink("Add a new Customer", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Customer", FormMethod.Get))
+{
+    <p align="right">
+        Find by customer Name or VAT Number: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-default" />
+        <a href="@Url.Action("Index", "Home")">Back to List</a>
+    </p>
+}
+<br />
+<p align="right" >
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { Sorting_Order = "Name", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Address", "Index", new { Sorting_Order = "Address", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Telephone Number", "Index", new { Sorting_Order = "Telephone_Number", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Contact Name", "Index", new { Sorting_Order = "Contact_Name", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Contact Email", "Index", new { Sorting_Order = "Contact_Email", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("VAT Number", "Index", new { Sorting_Order = "VAT_Number", currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Adress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelephoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.contactName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.contactEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VATNumber)
+            </td>
+            <td>
+                <a href="@Url.Action("Details", "Home", new { id = item.Id })">
+                    <img src="~/Images/details.png" style="vertical-align: middle; width: 30px;">
+                    <a />
+                    <a href="@Url.Action("Edit", "Home", new { id = item.Id })">
+                        <img src="~/Images/edit.png" style="vertical-align: middle; width: 30px;">
+                        <a />
+                        <a href="@Url.Action("Delete", "Home", new { id = item.Id })">
+                            <img src="~/Images/delete.png" style="vertical-align: middle; width: 30px;">
+                            <a/>
+</td>
+        </tr>
+    }
+
+</table>
+<br />
+<div style="text-align:center"> 
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div> 
